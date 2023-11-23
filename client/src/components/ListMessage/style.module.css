@@ -1,0 +1,17 @@
+
+  .sender {
+    padding: 0 10px;
+    color: #fff;
+    max-width: 70%;
+    margin: auto;
+    margin-right: 0;
+    word-wrap: break-word
+  }
+  .receiver{
+    padding: 0 10px;
+    color: #000;
+    max-width: 70%;
+    background: #ccc;
+    word-wrap: break-word
+
+  }

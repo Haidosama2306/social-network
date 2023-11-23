@@ -1,0 +1,79 @@
+
+.container{
+  margin-left: 400px;
+  margin-top: 150px;
+}
+.logo{
+  margin-top: 50px;
+  margin-left: -50px;
+}
+.socical_network{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+.formlg{
+  height: 400px;
+  width : 400px;
+  border: 2px solid black;
+}
+.register{
+  margin-top: 15px;
+  height: 50px;
+  width : 400px;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.listtextfieldlg{
+  margin-top: 20px;
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.listtextfieldlg > div,
+.listtextfieldpass > div{
+  color: red;
+}
+.listtextfieldpass{
+  margin-top: 20px;
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+
+}
+.textfieldlg{
+  padding-left: 10px;
+  margin-top: 10px;
+  width: 300px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.06);
+  border: none
+}
+.eyeposition{
+  position: absolute;
+  right: 15%;
+  top: 35%
+}
+.eyeopen{
+  display: none;
+}
+.formcheckbox{
+  margin-left: 50px;
+  margin-top: 10px;
+}
+.buttonlogin{
+  width: 300px;
+  height: 40px;
+}
+.forgotpass{
+  text-decoration: none;
+  color: black
+}

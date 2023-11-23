@@ -1,0 +1,100 @@
+
+    .logo {
+        border: 1px solid black;
+        width: 65px;
+        height: 65px;
+        border-radius: 50px;
+        margin: 0 auto;
+        margin-top: 20px;
+      }
+      .imgcard {
+        margin-top: 5px;
+      }
+      .container {
+        margin-left: 600px;
+        margin-top: 70px;
+      }
+      .socical_network {
+        margin-left: -200px;
+      }
+      .formlg {
+        height: 500px;
+        width : 400px;
+        border: 2px solid black;
+      }
+      .listtextfieldlg {
+        margin-top: 0;
+        width: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .listtextfieldpass {
+        margin-top: 20px;
+        width: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+      .textfieldlg {
+        padding-left: 10px;
+        width: 300px;
+        height: 40px;
+        background-color: rgba(0 0 0 0.06);
+        border: none;
+      }
+      .eyeposition {
+        position: absolute;
+        right: 15%;
+        top: 25%;
+      }
+      .eyeopen {
+        display: none;
+      }
+      .buttonsub {
+        width: 300;
+        height: 40;
+      }
+      .forgotpass {
+        text-decoration: none;
+        color: black;
+      }
+      .detail {
+        width: 300px;
+        margin: 0 auto;
+        margin-bottom: 70px;
+      }
+      .ques {
+        margin-top: 40px;
+        text-align: center; 
+        vertical-align: middle;
+        font-weight: bold;
+      
+      }
+      .listtextfoot {
+        margin-top: 70px;
+        text-align: center;
+        font-weight: bold;
+        position: relative;
+      }
+      .linefoot {
+        position: absolute;
+        background: black;
+        height: 2px;
+        left: -2px;
+        top: -10px;
+        width: 400px;
+      }
+      .resetpass {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        width: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .backtologin {
+        margin-top: 50px;
+        padding: 15px 15px;
+      }

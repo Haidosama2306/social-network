@@ -1,0 +1,13 @@
+.nav_item {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  margin-top: 1rem; 
+  margin-right: 0.75rem;
+  padding: 0.75rem;
+}
+
+.nav_item:hover {
+  background-color: #fafafa;
+  border-radius: 1.5rem;
+}

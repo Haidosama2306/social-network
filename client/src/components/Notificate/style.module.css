@@ -1,0 +1,27 @@
+
+    .shadow_element {
+        box-shadow: 0 0 15px rgba(0,0,0,0.75);
+        clip-path: inset(0px -15px 0px 0px);
+        height: 100vh;
+        background: #fff;
+    }
+    .shadow_element>  div:first-child{
+        background: none !important
+    }
+        .k{
+        width: 0;
+        z-index: 9999;
+        overflow: hidden;
+        background: #fff;
+        position: fixed !important;
+    right: 0px !important;
+    bottom: 0px !important;
+    top: 0px !important;
+    left: 190px !important;
+    border: 1px solid #ccc !important;
+    }
+    .notifi_now{
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+  

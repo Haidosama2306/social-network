@@ -1,0 +1,38 @@
+
+
+ .user{
+    width: 50;
+    height: 50;
+    border-radius: 100%;
+    cursor: pointer;
+    z-index: -1;
+ }
+ .box_message{
+    padding: 0 !important
+    
+ }
+ .user_message{
+    margin-top: 16px !important;
+    border-bottom: 1px solid #ccc !important
+ }
+ .main_user_avt{
+    height: 130px !important;
+    width: 130px !important;
+ }
+ .main_user{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
+ }
+ .box{
+    height: 340px !important;
+    overflow: auto  
+ }
+ .comment{
+    width: 100%;
+    border-radius: 50px;
+    padding:4px 16px;
+    border: 1px solid #ccc;
+   }
