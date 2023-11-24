@@ -14,7 +14,7 @@ function ListFollowers({ users }) {
 
                         <p className={`${styles.username}`}>{user.username}</p>
                         <p className={`${styles.fullname}`}>{user.fullname}</p>
-                        <button className={`${styles.btn_follow}`}>Xóa</button>
+                        <button className={`${styles.btn_following}`}>Theo dõi</button>
                     </div>
                 )
             })}

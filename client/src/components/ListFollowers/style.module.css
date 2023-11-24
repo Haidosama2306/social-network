@@ -23,6 +23,19 @@
     color: black;
     opacity: 0.5;
 }
+.btn_following {
+    position: absolute;
+    top: calc(50% - 15px);
+    right: 10px;
+    width: 150px;
+    height: 30px;
+    background-color: #0095F6;
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 0 10px 0 10px;
+    border-radius: 5px;
+}
 .btn_follow {
     position: absolute;
     top: calc(50% - 15px);
