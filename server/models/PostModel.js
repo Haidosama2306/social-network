@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema(
   {
     images: [{ type: String }],
-    videos: [{ type: String }],
     caption: { type: String },
     likeCount: {
       type: Number,
