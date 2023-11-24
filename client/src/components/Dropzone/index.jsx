@@ -66,23 +66,26 @@ const Dropzone = () => {
   const handlePost = async () => {
     try {
       setLoading(true);
-  
+
       if (!selectedImages.length && !selectedVideos.length && !caption) {
         console.error("Vui lòng chọn ảnh hoặc video và nhập chú thích.");
         return;
       }
-  
+
       const validImages = selectedImages.filter((image) => image.preview);
       const validVideos = selectedVideos.filter((video) => video.preview);
-  
-      const response = await axios.post("http://localhost:5000/api/create-post", {
-        images: validImages.map((image) => image.preview),
-        videos: validVideos.map((video) => video.preview),
-        caption,
-      });
-  
+
+      const response = await axios.post(
+        "http://localhost:5000/posts/create-post",
+        {
+          images: validImages.map((image) => image.preview),
+          videos: validVideos.map((video) => video.preview),
+          caption,
+        }
+      );
+
       console.log("Đăng bài thành công:", response.data);
-  
+
       setIsModalOpen(true);
     } catch (error) {
       console.error("Lỗi khi đăng bài:", error);
@@ -90,7 +93,6 @@ const Dropzone = () => {
       setLoading(false);
     }
   };
-  
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -107,17 +109,8 @@ const Dropzone = () => {
     </div>
   ));
 
-  const selectedVideosRender = selectedVideos?.map((file, index) => (
-    <div key={index}>
-      <video width="250" height="150" controls>
-        <source src={file.preview} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  ));
-
   return (
-    <div className="grid justify-center">
+    <div className="grid ">
       {selectedImages.length > 0 || selectedVideos.length > 0 ? (
         <div className="grid grid-rows-3">
           <div className="row-span-1">
@@ -141,33 +134,34 @@ const Dropzone = () => {
           </div>
           <div className="row-span-2 flex">
             {selectedImagesRender}
-            {selectedVideosRender}
           </div>
         </div>
       ) : (
-        <div
-          {...getRootProps()}
-          style={{
-            cursor: "pointer",
-            borderRadius: "8px",
-            color: "white",
-            textAlign: "center",
-            width: "200px",
-          }}
-          className="bg-blue-500 border-none"
-        >
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the files here ...</p>
-          ) : (
-            <button
-              style={{
-                padding: "7px 16px",
-              }}
-            >
-              Select from computer
-            </button>
-          )}
+        <div className="grid justify-center">
+          <div
+            {...getRootProps()}
+            style={{
+              cursor: "pointer",
+              borderRadius: "8px",
+              color: "white",
+              textAlign: "center",
+              width: "200px",
+            }}
+            className="bg-blue-500 border-none"
+          >
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <p>Drop the files here ...</p>
+            ) : (
+              <button
+                style={{
+                  padding: "7px 16px",
+                }}
+              >
+                Select from computer
+              </button>
+            )}
+          </div>
         </div>
       )}
 

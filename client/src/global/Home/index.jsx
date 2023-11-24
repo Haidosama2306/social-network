@@ -65,12 +65,27 @@ export default function HomePage() {
         console.log(error);
       });
   }, []);
+  const [listPosts, setListPosts] = useState([]);
 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/posts");
+        setListPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
   return (
     <div className="flex justify-center pb-16">
       <div className={`${styles.container_feed}`}>
 
-        {listPosts && listPosts.map((e) => <PostItem post={e} key={e.id} />)}
+      {listPosts.map((post) => (
+          <PostItem post={post} key={post._id} />
+        ))}
       </div>
       <div className={`${styles.suggestions}`}>
         {users && (
