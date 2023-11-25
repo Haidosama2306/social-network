@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {getUsers, } from '../controllers/users.js'
+import {getUsers, search} from '../controllers/users.js'
 import { authenticateJWT } from '../middleware/index.js';
 
 
@@ -8,12 +8,6 @@ const router = express.Router();
 
 router.get('/', getUsers);
 
-// // router.post('/', createUser);
-// router.post('/update/get-user',authenticateJWT, getUserUpdate);
-// router.post('/update',authenticateJWT, updateUser);
-// router.post('/search',authenticateJWT, search);
-// router.post('/profile',authenticateJWT, getProfile);
-// router.post('/follow',authenticateJWT, );
-
+router.post('/search',authenticateJWT, search);
 
 export default router;

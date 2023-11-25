@@ -62,3 +62,14 @@ export const getProfile = async (req, res) => {
         res.status(500).json({ error: err.message });
       }
 }
+
+export const findProfile = async (req, res) => {
+    try {
+        const users = await UserModel.find({ _id: req.user.id });
+    
+        res.status(200).json(users);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+      }
+}

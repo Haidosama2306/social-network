@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modalSearchState$ } from '../../redux/selectors';
 import axios from 'axios';
 import ListUser from '../ListUser';
+import { Link } from 'react-router-dom';
 function Search() {
     const isOpen = useSelector(modalSearchState$);
     const [data, setData] = useState('')
@@ -25,20 +26,23 @@ function Search() {
                 console.log(error);
             })
     }, [data])
+
+    const handleUserClick = (user) => {
+        <Link to={`/profile/${user}`}>{console.log('ID:', user)}</Link>
+        
+    };
     return (
         <div className={classess.k} style={{ display: isOpen.modalSearch.isShow ? 'block' : 'none', width: isOpen ? '400px' : '0', }}>
-            <h4 style={{fontSize: '20px', marginLeft: '30px', marginTop: '20px'}}>Tìm kiếm</h4>
+            <h4 style={{ fontSize: '20px', marginLeft: '30px', marginTop: '20px' }}>Tìm kiếm</h4>
             <form>
                 <input onChange={e => setData(e.target.value)} placeholder='Tìm kiếm' className={`${classess.search}`} />
 
             </form>
             <div className={`${classess.notifi_now}`}>
-                <ListUser users={user.data} />
+                    {/* {console.log('Selected user ID:', user.data._id)} */}
+                    <ListUser users={user.data} onUserClick={handleUserClick} />
             </div>
-            <div>
-
-            </div></div>
-
+        </div>
     );
 }
 

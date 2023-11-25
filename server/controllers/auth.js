@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import validate from 'validator'
 import { BioModel } from "../models/BioModel.js";
+import { FollowersModel } from "../models/FollowersModel.js";
+import { FollowingModel } from "../models/FollowingModel.js";
 export const login = async (req, res)=>{
 
     try {
@@ -100,6 +102,16 @@ export const register = async (req, res) => {
               username: savedUser.username,
             });
             await newBios.save();
+
+            const newFollowed = new FollowersModel({
+              user_id: savedUser._id,
+            })
+            await newFollowed.save();
+
+            const newFollowing = new FollowingModel({
+              user_id: savedUser._id,
+            })
+            await newFollowing.save();
             
                   jwt.sign(payload, 'abc-xyz', { expiresIn: 3600 }, (err, token) => {
                     if (err) throw err;

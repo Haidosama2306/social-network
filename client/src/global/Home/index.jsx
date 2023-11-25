@@ -89,16 +89,17 @@ export default function HomePage() {
       </div>
       <div className={`${styles.suggestions}`}>
         {users && (
-
+          <div>
           <ItemRow
             url={currentUser.avatar}
-            title={<Link to='/profile'>{users[0].username}</Link>}
+            title={<Link to={`/profile/${users[0]._id}`}>{users[0].username}</Link>}
             subTitle={currentUser.displayName}
             rightItem={
               <ButtonLink textBtn="Switch" onClick={() => console.log("")} />
             }
           />
-
+          {console.log(users[0]._id)}
+          </div>
         )}
         <div className="flex flex-row justify-between">
           <p className="font-bold text-secondary-text text-[14px]">

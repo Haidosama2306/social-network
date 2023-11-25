@@ -36,3 +36,16 @@
     padding: 0 10px 0 10px;
     border-radius: 5px;
 }
+.btn_follow {
+    position: absolute;
+    top: calc(50% - 15px);
+    right: 10px;
+    width: 150px;
+    height: 30px;
+    background-color: #858E95;
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 0 10px 0 10px;
+    border-radius: 5px;
+}

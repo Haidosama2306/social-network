@@ -13,7 +13,7 @@ function ListFollowers({ users }) {
                             className={`${styles.avatarUser}`} />
 
                         <p className={`${styles.username}`}>{user.username}</p>
-                        <p className={`${styles.fullname}`}>{user.fullname}</p>
+                        <p className={`${styles.fullname}`}>#{user.username}</p>
                         <button className={`${styles.btn_follow}`}>Xóa</button>
                     </div>
                 )

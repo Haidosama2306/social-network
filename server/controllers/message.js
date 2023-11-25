@@ -45,7 +45,7 @@ try {
 export const getMessage = async (req, res)=>{
 
     try {
-        console.log(req.body);
+        // console.log(req.body);
     const conversationId = await getOrCreateConversation(req.body.data.receiver_user_id, req.user.id);
 
     const messages = await MessageModel.find({ roomID:conversationId }).sort({ timestamp: 1 });
