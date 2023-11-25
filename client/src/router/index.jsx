@@ -21,7 +21,7 @@ export const router = createBrowserRouter(
         <Route element={<HomePage />} path="" />
         <Route element={<HomePage />} path="/home" />
         <Route element={<UpdateProfile />} path="update/user" />
-        <Route element={<ProfilePage />} path="profile" />
+        <Route element={<ProfilePage />} path="profile/:user_id" />
         <Route element={<MessagesPage />} path="messages" />
         <Route element={<NotificationsPage />} path="notifications" />
         <Route element={<CreatesPage />} path="creates" />

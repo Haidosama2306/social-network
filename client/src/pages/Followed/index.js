@@ -26,31 +26,7 @@ function Followed() {
                 console.log(error);
             })
     }, [data])
-    
-    const UserFollow = (
-        <div className={`${styles.User}`}>
-            <Avatar
-                src={NoAccounts}
-                className={`${styles.avatarUser}`} />
-
-            <p className={`${styles.username}`}>Username</p>
-            <p className={`${styles.fullname}`}>Fullname</p>
-            <button className={`${styles.btn_follow}`}>Xóa</button>
-        </div>
-    );
-
-    const UserFollowing = (
-        <div className={`${styles.User}`}>
-            <Avatar
-                src={NoAccounts}
-                className={`${styles.avatarUser}`} />
-
-            <p className={`${styles.username}`}>Username</p>
-            <p className={`${styles.fullname}`}>Fullname</p>
-            <button className={`${styles.btn_following}`}>Đang theo dõi</button>
-        </div>
-    );
-
+   
     const searchHeader = (
         <div className={`${styles.searchHeader}`}>
 

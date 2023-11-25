@@ -24,8 +24,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import Notificate from "../../components/Notificate";
 import Search from "../../components/Search";
 import { hideModalSearch, showModalSearch } from "../../redux/actions/modalSearch";
+import {  useEffect } from 'react';
+import axios from 'axios';
 
 export default function SideBar({ tabActive, onClickTab }) {
+
+  const [users, setUser] = useState('');
+
+  useEffect(() => {
+    const bearerToken = localStorage.getItem('auth_token');
+    const headers = {
+      'Authorization': `Bearer ${bearerToken}`,
+      'Content-Type': 'application/json',
+    };
+
+    axios
+      .post('http://localhost:5000/users/profile', {}, { headers: headers })
+      .then((res) => {
+        const users = res.data;
+        setUser(users);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [toggleSearch, setToggleSearch] = useState(false);
@@ -123,13 +146,15 @@ const handleShowModalSearch = useCallback(()=>{
         />
         <ModalCreate open={isModalOpen} onClose={handleCloseModal}/>
 
+      {users && (
         <NavItem
           icon={<MenuAvatar url={userAvatar} isActive={false} />}
           activeIcon={<MenuAvatar url={userAvatar} isActive={true} />}
           isActive={tabActive === "profile"}
           title={"Profile"}
-          onClick={() => onClickTab("profile")}
+          onClick={() => onClickTab(`/profile/${users[0]._id}`)}
         />
+        )}
       </div>
       <div className={`${styles.hide_icon_more} mb-6`}>
         <NavItem
