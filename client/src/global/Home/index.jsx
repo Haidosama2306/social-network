@@ -19,7 +19,7 @@ export default function HomePage() {
     };
 
     axios
-      .post('http://localhost:5000/users/profile', {}, { headers: headers })
+      .post('http://localhost:5000/users/findprofile', {}, { headers: headers })
       .then((res) => {
         const users = res.data;
         setUser(users);

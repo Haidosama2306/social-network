@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
-import { Avatar } from "@mui/material";
-import { NoAccounts } from "@mui/icons-material";
 import styles from "../Followed/style.module.css";
 import ListFollowers from "../../components/ListFollowers";
 

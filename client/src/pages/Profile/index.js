@@ -38,11 +38,33 @@ function Profile() {
                 console.error(error);
             });
     }, [data]);
+    
+    // const [_users, _setUser] = useState('');
+
+    // useEffect(() => {
+    //     const bearerToken = localStorage.getItem('auth_token');
+    //     const headers = {
+    //         'Authorization': `Bearer ${bearerToken}`,
+    //         'Content-Type': 'application/json',
+    //     };
+
+    //     axios
+    //         .post('http://localhost:5000/users/profile', {}, { headers: headers })
+    //         .then((res) => {
+    //             const _users = res.data;
+    //             setUser(_users);
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //         });
+    // }, []);
 
 
-    console.log('user.data._id: ', user.data[0]._id);
-    console.log('data: ', data);
-
+    // if (user && _users) {
+    //     console.log('user.data._id: ', user.data[0]._id);
+    //     console.log('data: ', data);
+    //     console.log('_user: ', _users);
+    // }
 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,6 +79,10 @@ function Profile() {
         setIsModalOpen(false);
     };
 
+    if (user) {
+        console.log('user.data._id: ', user.data[0]._id);
+        console.log('data: ', data);
+    }
     return (
         <div>
             {user && (
@@ -69,9 +95,8 @@ function Profile() {
                         </div>
                         <div className={`${styles.profile_hd_detail}`}>
                             <div className={`${styles.func}`}>
-
                                 <Typography variant='h3'>{user.data[0].username}</Typography>
-
+                            
                                 {/* kiểm tra nếu tồn tại users và userID trùng với user._id của người dùng thì vào trang cá nhân bản thân
                             còn không thì vào trang cá nhân của người khác */}
                                 {userId === user.data[0]._id ? (

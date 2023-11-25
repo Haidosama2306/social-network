@@ -36,7 +36,7 @@ function Followed() {
 
             <div className={`${styles.searchField}`}>
                 <SearchIcon className={`${styles.icon_searh}`}></SearchIcon>
-                <input className={`${styles.input_Search}`} type="text" placeholder="Tìm kiếm"></input>
+                <input onChange={e => setData(e.target.value)}  className={`${styles.input_Search}`} type="text" placeholder="Tìm kiếm"></input>
             </div>
         </div>
     );
