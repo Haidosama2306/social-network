@@ -49,6 +49,7 @@ function Profile() {
             });
         }, [params]);
 
+
         useEffect(() => {
             const bearerToken = localStorage.getItem('auth_token');
             const headers = {
@@ -73,10 +74,12 @@ function Profile() {
                 });
             }, [params]);
 
+
             console.log(' ------------------------ followers ------------------------');
             console.log('user: ', data);
             console.log('followed: ',  followed);
             console.log(' ------------------------ followers ------------------------');
+
 
     const insertSubmit = useCallback(() => {
         const bearerToken = localStorage.getItem('auth_token');

@@ -13,6 +13,7 @@ export const followed = async (req, res) => {
   }
 }
 
+
 export const findFollowed = async (req, res) => {
   try {
 
