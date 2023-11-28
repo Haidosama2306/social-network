@@ -5,7 +5,6 @@ import { FollowingModel } from '../models/FollowingModel.js';
 export const followed = async (req, res) => {
   try {
     const users = await FollowersModel.find();
-    console.log(users);
     res.status(200).json(users);
 
   } catch (err) {
@@ -15,21 +14,22 @@ export const followed = async (req, res) => {
 }
 
 
-export const getFollowed = async (req, res) => {
+export const findFollowed = async (req, res) => {
   try {
-    const user = await FollowersModel.find({ user_id: req.user.id });
-    res.status(200).json(user);
 
+      const data = req.body.data
+      const user = await FollowersModel.find({follower_user_id: data.follower_user_id});
+      res.status(200).json(user);
   } catch (err) {
-    res.status(500).json({ error: err });
+      res.status(500).json({ error: err });
 
   }
 }
 export const searchfollowed = async (req, res) => {
   try {
     const data = req.body.data
-    const followed = await FollowersModel.find({ username: { $regex: data, $options: 'i' } });
-    res.status(200).json(followed);
+    const users = await FollowersModel.find({follower_username: { $regex: data, $options: 'i' } });
+    res.status(200).json(users);
 
   } catch (err) {
     res.status(500).json({ error: err });
@@ -46,7 +46,7 @@ export const insertFollowed = async (req, res) => {
         user_id:  req.user.id,
         follower_user_id: data.follower_user_id,
         follower_username: data.follower_username,
-        type: data.type
+        type: 'followed'
       })
       await newFollowed.save()
       res.status(200).json(newFollowed);
