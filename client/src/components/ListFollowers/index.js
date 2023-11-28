@@ -3,6 +3,7 @@ import styles from "./style.module.css";
 import React from 'react';
 
 function ListFollowers({ users }) {
+
     return (
         <div>
             {users && users.map((user, i) => {
@@ -15,6 +16,7 @@ function ListFollowers({ users }) {
                         <p className={`${styles.username}`}>{user.follower_username}</p>
                         <p className={`${styles.fullname}`}>#{user.follower_username}</p>
                         <button className={`${styles.btn_following}`}>{user.type}</button>
+
                     </div>
                 )
             })}

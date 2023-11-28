@@ -13,6 +13,7 @@ export const followed = async (req, res) => {
   }
 }
 
+
 export const findFollowed = async (req, res) => {
   try {
 
@@ -46,6 +47,7 @@ export const insertFollowed = async (req, res) => {
         follower_user_id: data.follower_user_id,
         follower_username: data.follower_username,
         type: 'Theo dõi'
+
       })
       await newFollowed.save()
       res.status(200).json(newFollowed);
