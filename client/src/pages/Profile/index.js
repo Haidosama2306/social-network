@@ -48,10 +48,6 @@ function Profile() {
                 console.error(error);
             });
         }, [params]);
-        //     console.log(' ------------------------ profile ------------------------');
-        //     console.log('user: ', data);
-        //     console.log('followed: ',  followed);
-        //     console.log(' ------------------------ profile ------------------------');
 
         useEffect(() => {
             const bearerToken = localStorage.getItem('auth_token');
@@ -77,10 +73,10 @@ function Profile() {
                 });
             }, [params]);
 
-            // console.log(' ------------------------ followers ------------------------');
-            // console.log('user: ', data);
-            // console.log('followed: ',  followed);
-            // console.log(' ------------------------ followers ------------------------');
+            console.log(' ------------------------ followers ------------------------');
+            console.log('user: ', data);
+            console.log('followed: ',  followed);
+            console.log(' ------------------------ followers ------------------------');
 
     const insertSubmit = useCallback(() => {
         const bearerToken = localStorage.getItem('auth_token');

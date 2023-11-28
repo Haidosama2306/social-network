@@ -45,7 +45,7 @@ function Followed() {
             </div>
 
             <div className={`${styles.content}`}>
-               <ListFollowers users={user.data}/>
+               <ListFollowers users={user.data}></ListFollowers>
             </div>
         </div>
     );

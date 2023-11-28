@@ -13,7 +13,6 @@ export const followed = async (req, res) => {
   }
 }
 
-
 export const findFollowed = async (req, res) => {
   try {
 
@@ -46,7 +45,7 @@ export const insertFollowed = async (req, res) => {
         user_id:  req.user.id,
         follower_user_id: data.follower_user_id,
         follower_username: data.follower_username,
-        type: 'followed'
+        type: 'Theo dõi'
       })
       await newFollowed.save()
       res.status(200).json(newFollowed);
@@ -76,10 +75,10 @@ export const deleteFollowed = async (req, res) => {
   }
 };
 
+
 export const following = async (req, res) => {
   try {
     const users = await FollowingModel.find();
-    console.log(users);
     res.status(200).json(users);
 
   } catch (err) {
@@ -87,20 +86,22 @@ export const following = async (req, res) => {
 
   }
 }
-export const getFollowing = async (req, res) => {
-  try {
-    const user = await FollowingModel.find({ user_id: req.user.id });
-    res.status(200).json(user);
 
+export const findFollowing= async (req, res) => {
+  try {
+
+      const data = req.body.data
+      const user = await FollowingModel.find({follower_user_id: data.follower_user_id});
+      res.status(200).json(user);
   } catch (err) {
-    res.status(500).json({ error: err });
+      res.status(500).json({ error: err });
 
   }
 }
-export const searchfollowing = async (req, res) => {
+export const searchfollowing= async (req, res) => {
   try {
     const data = req.body.data
-    const users = await FollowingModel.find({ username: { $regex: data, $options: 'i' } });
+    const users = await FollowingModel.find({following_username: { $regex: data, $options: 'i' } });
     res.status(200).json(users);
 
   } catch (err) {
@@ -108,32 +109,40 @@ export const searchfollowing = async (req, res) => {
 
   }
 }
-
-export const insertFollowing = async (req, res) => {
+export const insertFollowing= async (req, res) => {
   try {
-    const { following_user_id } = req.body;
-    const user = await FollowingModel.findOne({ following_user_id: following_user_id });
+    const data = req.body.data
 
-    user.following_user_id.push(following_user_id);
-    await user.save();
-
-    res.status(200).json({ message: 'Đã theo dõi' });
+    const check  = await FollowingModel.findOne({ user_id: req.user.id, following_user_id: data.following_user_id});
+    if(!check){
+      const newFollowing= new FollowingModel({
+        user_id:  req.user.id,
+        following_user_id: data.following_user_id,
+        following_username: data.following_username,
+        type: 'following'
+      })
+      await newFollowed.save()
+      res.status(200).json(newFollowed);
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-export const deleteFollowing = async (req, res) => {
+
+export const deleteFollowing= async (req, res) => {
   try {
-    const { following_user_id } = req.body;
-    const user = await FollowingModel.findOne({ following_user_id: following_user_id });
+    const data = req.body.data
 
-    const index = user.following_user_id.indexOf(following_user_id);
-
-    user.follower_user_id.splice(index, 1);
-    await user.save();
-
-    res.status(200).json({ message: 'Đã hủy theo dõi' });
+    const check  = await FollowingModel.findOne({ user_id: req.user.id, following_user_id: data.following_user_id});
+    if(check){
+      await FollowingModel.deleteOne({
+        user_id: req.user.id,
+        following_user_id: data.following_user_id,
+      });
+      res.status(200).json({ message: 'Đã hủy theo dõi' });
+    }
+    
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });

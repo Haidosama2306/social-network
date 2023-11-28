@@ -72,7 +72,7 @@ function UpdateProfile() {
         </label>
         <label htmlFor='username'>
             <span>Giới thiệu</span>
-            <textarea defaultValue={data.introduct|| ''} onChange={e=> setData({...data, introduct: e.target.value})}></textarea>
+            <textarea onChange={e=> setData({...data, introduct: e.target.value})}>{data.introduct|| ''}</textarea>
         </label>
             <Button onClick={handleSubmit} style={{width: '50px'}} variant='outlined'>Lưu</Button>
             </div>
