@@ -39,7 +39,7 @@ export default function SideBar({ tabActive, onClickTab }) {
     };
 
     axios
-      .post('http://localhost:5000/users/findprofile', {}, { headers: headers })
+      .post('http://localhost:5000/users/findprofile', {_id: localStorage.getItem('auth_user')}, { headers: headers })
 
       .then((res) => {
         const users = res.data;

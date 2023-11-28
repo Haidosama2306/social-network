@@ -15,7 +15,7 @@ function Followed() {
             'Content-Type': 'application/json',
 
         };
-        axios.post('http://localhost:5000/users/search', { data: data }, { headers: headers })
+        axios.post('http://localhost:5000/followers/searchfollowed', { data: data }, { headers: headers })
             .then(user => {
                 setUser(user)
             })

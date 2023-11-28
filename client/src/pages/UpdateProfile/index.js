@@ -1,6 +1,7 @@
 import { Avatar, Button, CardHeader, MenuItem, Select, TextField, TextareaAutosize, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import classess from './style.module.css'
+import Swal from 'sweetalert2'
 import axios from 'axios';
 function UpdateProfile() {
     const [user, setUser] = useState()
@@ -20,7 +21,7 @@ function UpdateProfile() {
         axios.post('http://localhost:5000/users/update/get-user',{data: ''}, {headers: headers})
         .then(user=>{
             setUser(user.data[0])
-            console.log(user.data[0].username)
+            // console.log(user.data[0].username)
             setData({fullname: user.data[0].fullname, birthday: user.data[0].birthday, introduct: user.data[0].introduct, gender: user.data[0].gender})
         })
         .catch(error=>{
@@ -37,13 +38,15 @@ function UpdateProfile() {
         axios.post('http://localhost:5000/users/update',{data: data}, {headers: headers})
         .then(user=>{
             setUser(user)
+            Swal.fire("Chỉnh sửa thành công!");
         })
         .catch(error=>{
             console.log(error);
         })
     },[data])
     return (
-        <div className={`${classess.update_profile} mt-5`}>
+        <>
+       {user && ( <div className={`${classess.update_profile} mt-5`}>
             <div>
             <Typography variant='h4'>Chỉnh Sửa Trang Cá Nhân</Typography>
             <div style={{textAlign: 'center', margin: '0 auto'}}><CardHeader className={`${classess.card}`}
@@ -73,7 +76,8 @@ function UpdateProfile() {
         </label>
             <Button onClick={handleSubmit} style={{width: '50px'}} variant='outlined'>Lưu</Button>
             </div>
-        </div>
+        </div>)}
+        </>
     );
 }
 

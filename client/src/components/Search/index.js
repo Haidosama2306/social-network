@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modalSearchState$ } from '../../redux/selectors';
 import axios from 'axios';
 import ListUser from '../ListUser';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 function Search() {
     const isOpen = useSelector(modalSearchState$);
     const [data, setData] = useState('')
     const [user, setUser] = useState('')
+    const navigate = useNavigate()
     console.log(isOpen);
     useEffect(() => {
         const bearerToken = localStorage.getItem('auth_token');
@@ -28,7 +29,7 @@ function Search() {
     }, [data])
 
     const handleUserClick = (user) => {
-        <Link to={`/profile/${user}`}>{console.log('ID:', user)}</Link>
+navigate(`/profile/${user}`)
         
     };
     return (

@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from 'cors';
 import posts from './routers/posts.js';
 import users from './routers/users.js';
+import followers from './routers/followers.js'
 import messages from './routers/messages.js';
 import auth from './routers/auth.js';
 import {connect} from './config/index.js'
@@ -26,6 +27,7 @@ connect(app)
 app.use('/auth',auth);
 app.use('/posts', posts);
 app.use('/users',users);
+app.use('/followers',followers);
 app.use('/messages',messages);
 // var io2 = socket.listen(server);
 io.on('connection', (socket)=>{

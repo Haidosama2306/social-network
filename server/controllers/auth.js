@@ -16,7 +16,7 @@ export const login = async (req, res)=>{
           validator.push({email: 'Email của bạn không chính xác'})
         }
         if (!validate.isLength(password,{min: 5, max: 32})) {
-          validator.push({password:'Password từ 6 đến 32 kí tự'})
+          validator.push({password:'Password không chính xác'})
         }
         if (validator.length > 0) {
           return res.status(400).json({err: validator})
@@ -31,7 +31,7 @@ export const login = async (req, res)=>{
                 if (isMatch) {
                   const payload = { id: user._id, username: user.username };
       
-                  jwt.sign(payload, 'abc-xyz', { expiresIn: 3600 }, (err, token) => {
+                  jwt.sign(payload, 'abc-xyz', { expiresIn: 7200 }, (err, token) => {
                     if (err) throw err;
       
                 return res.json({ success: true, token: token, user: user._id });

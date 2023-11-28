@@ -65,7 +65,7 @@ export const getProfile = async (req, res) => {
 
 export const findProfile = async (req, res) => {
     try {
-        const users = await UserModel.find({ _id: req.user.id });
+        const users = await UserModel.find({ _id: req.body._id });
     
         res.status(200).json(users);
       } catch (err) {

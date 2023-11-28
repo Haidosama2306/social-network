@@ -19,10 +19,11 @@ export default function HomePage() {
     };
 
     axios
-      .post('http://localhost:5000/users/findprofile', {}, { headers: headers })
+      .post('http://localhost:5000/users/findprofile', {_id: localStorage.getItem('auth_user')}, { headers: headers })
       .then((res) => {
         const users = res.data;
         setUser(users);
+        console.log(users);
       })
       .catch((error) => {
         console.error(error);
@@ -41,6 +42,7 @@ export default function HomePage() {
     axios
       .get('http://localhost:5000/users', {}, { headers: headers })
       .then((res) => {
+        console.log(res);
         const _user = res.data;
         setData(_user);
 
@@ -98,7 +100,6 @@ export default function HomePage() {
               <ButtonLink textBtn="Switch" onClick={() => console.log("")} />
             }
           />
-          {console.log(users[0]._id)}
           </div>
         )}
         <div className="flex flex-row justify-between">
