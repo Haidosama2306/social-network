@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {followed, getFollowed, searchfollowed, insertFollowed, deleteFollowed} 
+import {followed, findFollowed, searchfollowed, insertFollowed, deleteFollowed} 
     from '../controllers/followers.js';
 import { authenticateJWT } from '../middleware/index.js';
 
@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', followed);
 
 //Followed
-router.post('/getfollowed',authenticateJWT, getFollowed);
+router.post('/findfollowed',authenticateJWT, findFollowed);
 router.post('/searchfollowed',authenticateJWT, searchfollowed);
 router.post('/insertfollowed',authenticateJWT, insertFollowed);
 router.post('/deletefollowed',authenticateJWT, deleteFollowed);

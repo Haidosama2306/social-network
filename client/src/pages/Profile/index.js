@@ -1,7 +1,7 @@
 import { Avatar, Button, Grid, IconButton, Typography } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import styles from '../../pages/Profile/style.module.css';
 import ModalFollowed from '../../components/Modal/Modal_Followed';
 import ModalFollowing from '../../components/Modal/Modal_Followeing';
@@ -9,13 +9,17 @@ import ModalComment from '../../components/Modal/Modal_Comment';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BorderAllIcon from '@mui/icons-material/BorderAll';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import Swal from 'sweetalert2'
 
 
 function Profile() {
-
     const [user, setUser] = useState('');
+    const [followed, setFollowed] = useState({
+        user_id: '',
+        follower_user_id: '',
+        follower_username: '',
+        type: '',
+    });
     const [data, setData] = useState({
         user_id: '',
         follower_user_id: '',
@@ -23,9 +27,10 @@ function Profile() {
         type: '',
     });
     const params = useParams();
+    const navigate = useNavigate()
+    const userid = localStorage.getItem('auth_user')
 
     useEffect(() => {
-        setData(localStorage.getItem('auth_user'));
         const bearerToken = localStorage.getItem('auth_token');
         const headers = {
             'Authorization': `Bearer ${bearerToken}`,
@@ -33,21 +38,51 @@ function Profile() {
         };
 
         axios
-            .post('http://localhost:5000/users/findprofile', { _id: params.user_id, data: '' }, { headers: headers })
+            .post('http://localhost:5000/users/findprofile', { _id: params.user_id, data: data }, { headers: headers })
             .then(user => {
                 setUser(user.data[0]);
-                setData({ user_id: data, follower_user_id: user.data[0]._id, follower_username: user.data[0].username, type: 'followed'})
+                setFollowed( user.data[0]);
+                setData({ user_id: userid, follower_user_id: user.data[0]._id, follower_username: user.data[0].username})
             })
             .catch((error) => {
                 console.error(error);
             });
-    }, [params]);
+        }, [params]);
+        //     console.log(' ------------------------ profile ------------------------');
+        //     console.log('user: ', data);
+        //     console.log('followed: ',  followed);
+        //     console.log(' ------------------------ profile ------------------------');
 
-    console.log('userId ', data);
-    console.log('params: ', params);
-    console.log('user: ', user);
+        useEffect(() => {
+            const bearerToken = localStorage.getItem('auth_token');
+            const headers = {
+                'Authorization': `Bearer ${bearerToken}`,
+                'Content-Type': 'application/json',
+            };
+    
+            axios
+                .post('http://localhost:5000/followers/findfollowed', { _id: params.user_id, data: data }, { headers: headers })
+                .then(user => {
+                    setFollowed( user.data[0]);
+                    if(params.user_id !== userid){
+                        if(user.data[0] == undefined){
+                            setFollowed({ user_id: userid, follower_user_id: data.follower_user_id, follower_username: data.follower_username, type: ''})
+                        }else{
+                            setFollowed({ user_id: userid, follower_user_id: user.data[0].follower_user_id, follower_username: user.data[0].follower_username, type: user.data[0].type})
+                        }
+                    }   
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            }, [params]);
 
-    const handleSubmit = useCallback(() => {
+            // console.log(' ------------------------ followers ------------------------');
+            // console.log('user: ', data);
+            // console.log('followed: ',  followed);
+            // console.log(' ------------------------ followers ------------------------');
+
+    const insertSubmit = useCallback(() => {
         const bearerToken = localStorage.getItem('auth_token');
         const headers = {
             Authorization: `Bearer ${bearerToken}`,
@@ -57,7 +92,24 @@ function Profile() {
             .then(user => {
                 setUser(user);
                 Swal.fire('Theo dõi thành công!');
-                
+                navigate(`/profile/${params.user_id}`)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, [data]);
+
+    const deleteSubmit = useCallback(() => {
+        const bearerToken = localStorage.getItem('auth_token');
+        const headers = {
+            Authorization: `Bearer ${bearerToken}`,
+            ContentType: 'application/json',
+        };
+        axios.post('http://localhost:5000/followers/deletefollowed', { data: data }, { headers: headers })
+            .then(followed => {
+                setUser(followed);
+                Swal.fire('Đã hủy theo dõi!');
+                navigate(`/profile/${params.user_id}`)
             })
             .catch((error) => {
                 console.error(error);
@@ -91,7 +143,7 @@ function Profile() {
                             {user &&(
                                 <Typography variant='h3'>{user.username}</Typography>
                             )}
-                            {data === params.user_id ? (
+                            {userid === params.user_id ? (
                                 <Grid className={`${styles.profile_user}`}>
                                     <Link to='/update/user'>
                                         <Button className={`${styles.btn_editfprofile}`} sx={{ width: 300, height: 40 }}>Chỉnh sửa trang cá nhân</Button>
@@ -100,7 +152,11 @@ function Profile() {
                                 </Grid>
                             ) : (
                                 <Grid className={`${styles.profile_follow}`}>
-                                    <Button onChange={e => setData({ ...data, follower_user_id: e.target.value, follower_username: e.target.value, type: e.target.value })} className={`${styles.btn_follow}`} sx={{ width: 200, height: 40 }} onClick={handleSubmit}>Theo dõi</Button>
+                                    {followed && followed.type === '' ? (
+                                        <Button className={`${styles.btn_follow}`} sx={{ width: 200, height: 40 }} onClick={insertSubmit}>Theo dõi</Button>
+                                    ) : (
+                                        <Button className={`${styles.btn_follow}`} sx={{ width: 200, height: 40 }} onClick={deleteSubmit}>Hủy Theo dõi</Button>
+                                    )}
                                     <Button className={`${styles.btn_messager}`} sx={{ width: 200, height: 40 }}>Nhắn tin</Button>
                                 </Grid>
                             )}
