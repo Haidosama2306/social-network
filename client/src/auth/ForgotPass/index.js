@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import Styles from '../ForgotPass/style.css';
 import classes from './style.module.css';
 
 import { Button, CardMedia } from '@mui/material';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function ForgotPass() {
+    const [email, setEmail]= useState('')
+    const handleFogotPwd = ()=>{
+        axios.post('http://localhost:5000/auth/forgotPass',{data: email})
+        .then(isSuccess=>{
+                Swal.fire('Chúng tôi sẽ gửi tin nhắn qua mail của bạn vui lòng kiểm tra email hoắc trong mục spam! ')
+                
+                
+            })
+            .catch((err)=>{
+            console.log(err);
+
+        })
+    }
     return (
         // className={`${Styles.logo}`}
         <div className={`${classes.container}`}>
@@ -34,14 +49,14 @@ function ForgotPass() {
                         {/* Text Field */}
                         <div className={`${classes.listtextfieldlg}`}>
                             {/* <TextField className={`${Styles.textfieldlg}`} label="Email" variant="filled" size="small"/> */}
-                            <input className={`${classes.textfieldlg}`} type="email" id="Email" placeholder='Email'></input>
+                            <input  onChange={e=>setEmail(e.target.value)} className={`${classes.textfieldlg} text-forgotPwt`} type="email" id="Email" placeholder='Email'></input>
                         </div>
                         {/* /Text Field */}
                         
                         {/* Submit */}
                         <div className={`${classes.listtextfieldpass}`}>
                             
-                                <Button className={`${classes.buttonregis}`} variant="contained" disableElevation>
+                                <Button onClick={handleFogotPwd} className={`${classes.buttonregis} btn-fogotPwd`} variant="contained" disableElevation>
                                     Gửi liên kết đăng nhập
                                 </Button>
                         </div>

@@ -1,9 +1,47 @@
-import React from 'react';
-import Styles from './style.css';
+import React, { useEffect, useState } from 'react';
+import Styles from './style.module.css';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function ResetPass() {
+    const [data, setData] = useState({
+        password: '',
+        comfirm_pwd: '',
+        token: window.location.href.split('=')[1]
+    })
+    const [loading, setLoading] = useState(false)
+    const [err, setErr] = useState()
+    const navigator= useNavigate();
+    useEffect(()=>{
+        axios.post('http://localhost:5000/auth/resetPass',{data: window.location.href.split('=')[1]})
+    .then(token=>{
+        console.log(token);
+        if (token.data!=true) {
+            
+            navigator('/forgotPass')
+        }
+       
+    })
+    },[])
+    const handleChangePwd = ()=>{
+        setLoading(true)
+        axios.post('http://localhost:5000/auth/updatePwd',{data: data})
+        .then(isSuccess=>{
+            setLoading(false)
+            Swal.fire('Thay đổi password thành công ')
+            navigator('/')
+
+        })
+        .catch(error=>{
+            setErr(error.response.data)
+            console.log(err);
+            setLoading(false)
+
+        })
+        
+    }
     return (
         // `${Styles.container}`
         <div className={`${Styles.container}`}>
@@ -29,20 +67,24 @@ function ResetPass() {
                                 <span className={`${Styles.eyeclose}`}><i className="fa-regular fa-eye-slash fa-flip-horizontal"></i></span>
                                 <span className={`${Styles.eyeopen}`}><i className="fa-regular fa-eye fa-flip-horizontal"></i></span>
                             </div>
-                            <input className={`${Styles.textfieldlg}`} type="password" id="Password" placeholder='Mật khẩu mới'></input>
+                            <input className={`${Styles.textfieldlg}`} onChange={e=>setData({...data, password: e.target.value})} type="password" id="Password" placeholder='Mật khẩu mới'></input>
+                            <div style={{color: 'red'}}>{err?.err[0]?.password}</div>
                         </div> 
                         <div className={`${Styles.listtextfieldpass}`}>
                             <div className={`${Styles.eyeposition}`}>
                                 <span className={`${Styles.eyeclose}`}><i className="fa-regular fa-eye-slash fa-flip-horizontal"></i></span>
                                 <span className={`${Styles.eyeopen}`}><i className="fa-regular fa-eye fa-flip-horizontal"></i></span>
                             </div>
-                            <input className={`${Styles.textfieldlg}`} type="password" id="Password" placeholder='Nhập lại mật khẩu mới'></input>
+                            <input className={`${Styles.textfieldlg}`} onChange={e=>setData({...data, comfirm_pwd: e.target.value})} type="password" id="Password" placeholder='Nhập lại mật khẩu mới'></input>
+                            <div style={{color: 'red'}}>{err?.err[0]?.comfirm_pwd || err?.err[1]?.comfirm_pwd}</div>
+
+
                         </div> 
                         {/* /Text Field */}
                         
                         {/* Submit */}
                         <div className={`${Styles.resetpass}`}>
-                                <Button className={`${Styles.buttonsub}`} variant="contained" disableElevation>
+                                <Button disabled={loading} onClick={handleChangePwd} className={`${Styles.buttonsub} btn-changepwd`} variant="contained" disableElevation>
                                     Xác nhận
                                 </Button>
                         </div>
