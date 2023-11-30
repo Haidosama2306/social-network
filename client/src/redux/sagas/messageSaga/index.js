@@ -10,7 +10,6 @@ function* fetchMessageSaga(action) {
   'Content-Type': 'application/json',
 
 };
-console.log(action.payload);
 
     const messages = yield call(api.fetchMessages,action.payload,headers);
     yield put(actions.getMessages.getMessageSuccess(messages.data));

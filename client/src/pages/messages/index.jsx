@@ -1,5 +1,5 @@
 import { Avatar, Button, CardHeader, Grid, IconButton, Typography, CardActions, Input, InputAdornment } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import classess from './style.module.css'
 import axios from 'axios';
 import { MoodRounded } from '@mui/icons-material';
@@ -18,7 +18,6 @@ const URL =  'http://localhost:5001/';
 const socket = io.connect(URL)
 function MessagesPage() {
   const [users, setUser] = useState('');
-
     useEffect(() => {
         const bearerToken = localStorage.getItem('auth_token');
         const headers = {
@@ -37,8 +36,6 @@ function MessagesPage() {
             });
     }, []);
 
-  const param = useParams();
-
     const dispatch = useDispatch();
   const [content, setContent] = useState('')
   const [type, setType] = useState('text')
@@ -47,27 +44,36 @@ function MessagesPage() {
   const [showPicker, setShowPicker] = useState(false)
   const [file, setFile] = useState()
   const messages = useSelector(messageState$);
-  useEffect(()=>{
-    socket.on('receiver', (data)=>{
-      dispatch(actions.createMessage.createMessageSuccess(data))
+  
+  
+  socket.on('check',(data)=>{
+    console.log(data);
+  })
+  useEffect(() => {
+    socket.emit('room', localStorage.getItem('auth_user'))
+    socket.on('message', (data) => {
+      console.log(data);
+      dispatch(actions.createMessage.createMessageSuccess(data));
     });
-  },[dispatch])
+  }, [dispatch]);
+  
 
   const handleSubmit = useCallback(() => {
     const data = {
+      roomUser: chooseUser,
       room: localStorage.getItem('room'),
       content: content, 
       file: file, 
       user_id: localStorage.getItem('auth_user'),
       receiver_user_id: chooseUser,
       type: type,
-      msg: localStorage.getItem('auth_user')
+      msg: localStorage.getItem('auth_user'),
+      typeSecond: 'messages'
     }
     // console.log(data);
     socket.emit('send', data)
     dispatch(actions.createMessage.createMessageSuccess(data))
     setContent('')
-
   }, [content, dispatch,type, chooseUser])
   const onEmojiClick = (event, emojiObject) => {
     setContent((prevInput) => prevInput + event.emoji);
@@ -79,11 +85,11 @@ function MessagesPage() {
     document.querySelector(`.${classess.comment}`).value = ''
     dispatch(actions.getUsersMessage.getUsersMessageRequest())
     dispatch(actions.getMessages.getMessageRequest({receiver_user_id: chooseUser}))
-    socket.emit('room', localStorage.getItem('room'))
+    socket.emit('room', chooseUser)
   },[chooseUser, dispatch, room])
   const handleShowChooseFile = useCallback(() => {
     document.querySelector('#chooseFile > input').click()
-  })
+  },[chooseUser])
   const handleFilebase64 = (e)=>{
    
     console.log(content);
@@ -123,6 +129,7 @@ function MessagesPage() {
 
     return replacedText;
   };
+  
   return (
     <Grid container style={{ flexDirection: 'row-reverse' }} spacing={3}>
       <Grid item xs={2.5} className={`${classess.box_message}`} >
@@ -144,7 +151,7 @@ function MessagesPage() {
           <Typography variant='h6' color='textSecond'>@linh</Typography>
           <Button color='info'>Xem Trang Cá Nhân</Button>
         </div>
-        <div className={classess.box}>
+        <div className={classess.box} >
         <ListMessage messages={messages.data}></ListMessage>
         </div>
         <CardActions className='pb-4'>
