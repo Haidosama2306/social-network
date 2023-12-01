@@ -1,0 +1,74 @@
+/* Thanh trạng thái comment của User */
+.User {
+    position: relative;
+    padding-top: 10px;
+}
+
+.userInfo {
+    position: relative;
+}
+
+.avatarUser {
+    position: absolute;
+    top: 20%;
+    left: 3%;
+}
+
+.nameUser {
+    position: absolute;
+    padding-top: 10px;
+    left: 15%;
+    font-weight: bold;
+    font-size: 18;
+}
+
+.commentBody {
+    position: relative;
+}
+
+.commentUser {
+    position: absolute;
+    top: 35px;
+    left: 15%;
+}
+
+.commentContent {
+    position: absolute;
+    font-size: 16px;
+}
+
+.likeComment {
+    position: absolute;
+    top: 35px;
+    left: 90%;
+}
+
+.statusUser {
+    position: absolute;
+    left: 15%;
+    top: 60px;
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+.likeCount {
+    position: absolute;
+    top: 60px;
+    left: 35%;
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+.reply {
+    position: absolute;
+    top: 55px;
+    left: 70%;
+}
+
+.btnReply {
+    font-size: 12px;
+    color: black;
+    opacity: 0.5;
+    font-weight: bold;
+    text-decoration: none;
+}

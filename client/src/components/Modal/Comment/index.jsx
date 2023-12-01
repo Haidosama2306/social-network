@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, useCallback} from "react";
 import axios from "axios";
 import styles from './style.module.css';
 import { Avatar, Card, Grid, CardMedia } from "@mui/material";
@@ -7,11 +7,21 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import SendIcon from '@mui/icons-material/Send';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import ListComments from '../../../components/ListComments';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom'
 
 export default function Comment() {
-
-    const [users, setUser] = useState('');
-
+    const postID = '6562392964e89ccbe21a2877'
+    const navigate = useNavigate()
+    const [profile, setprofile] = useState('');
+    const [postcmt, setPostcmt] = useState('')
+    const [data, setData] = useState({
+        post_id: '',
+        user_id: '',
+        username: '',
+        body: '',
+    })
     useEffect(() => {
         const bearerToken = localStorage.getItem('auth_token');
         const headers = {
@@ -20,19 +30,59 @@ export default function Comment() {
         };
 
         axios
-            .post('http://localhost:5000/users/profile', {}, { headers: headers })
+            .post('http://localhost:5000/users/profile', {data: data}, { headers: headers })
             .then((res) => {
-                const users = res.data;
-                setUser(users);
+                const profile = res.data[0];
+                setprofile(profile);
             })
             .catch((error) => {
                 console.error(error);
             });
     }, []);
 
+    useEffect(()=>{
+
+        const bearerToken = localStorage.getItem('auth_token');
+        const headers = {
+      'Authorization': `Bearer ${bearerToken}`,
+      'Content-Type': 'application/json',
+    };
+        axios.post('http://localhost:5000/comments/findcomments',{data: data}, {headers: headers})
+        .then((res)=>{
+            const postcmt = res.data
+            setPostcmt(postcmt)
+        })
+        .catch(error=>{
+            console.log(error);
+        })
+    },[])
+
+    const handleSubmit = useCallback(()=>{
+        const bearerToken = localStorage.getItem('auth_token');
+        const headers = {
+      'Authorization': `Bearer ${bearerToken}`,
+      'Content-Type': 'application/json',
+    
+    };
+        axios.post('http://localhost:5000/comments/insertcomments',{data: data}, {headers: headers})
+        .then((res)=>{
+            const postcmt = res.data
+            setPostcmt(postcmt)
+            setData({post_id: postID, user_id: profile._id, username: profile.username, body: postcmt.body})
+            // Swal.fire("Thêm Bình luận thành công!");
+
+            console.log('profile: ',profile);
+            console.log('data: ',data);
+            console.log('postcmt:',postcmt);
+        })
+        .catch(error=>{
+            console.log(error);
+        })
+    },[data])
 
     const statusPoster = (
         <div>
+            {profile && (
             <div className={`${styles.Poster}`}>
                 <div className="row">
                     <div className="col-md-3">
@@ -40,15 +90,13 @@ export default function Comment() {
                             sx={{ width: 50, height: 50 }}
                             alt="Messi"
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg/220px-Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg"
-
                             className={`${styles.avatar_poster}`}
                         />
                     </div>
-                    { users && (
+                    
                     <div className="col-md-6">
-                        <p className={`${styles.namePoster}`}>{users[0].username}</p>
+                        <a className={`${styles.namePoster}`}  onChange={e=> setData({...data, username: e.target})}>{profile.username}</a>
                     </div>
-                    )}
                     <div className="col-md-2">
                         <p className={`${styles.statusPoster}`}>Online</p>
                     </div>
@@ -60,49 +108,11 @@ export default function Comment() {
                     </div>
                 </div>
             </div>
+            )}
             <div className={`${styles.borderBottom}`}></div>
         </div>
     );
 
-    const statusUser = (
-        <div className={`${styles.userComment}`}>
-            <div className={`${styles.User}`}>
-                <div className={`${styles.userInfo}`}>
-                    <div className={`${styles.avatarUser}`}>
-                        <Avatar
-                            alt="User1"
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJCffxOKRLn21jLPSYrtR5knqhMJ7jWsq9EQ&usqp=CAU" />
-                    </div>
-
-                    <div className={`${styles.nameUser}`}>
-                        <p >User 1</p>
-                    </div>
-                </div>
-
-                <div className={`${styles.commentBody}`}>
-                    <div className={`${styles.commentUser}`} >
-                        <p>Comment ở đây nè</p>
-                    </div>
-
-                    <div className={`${styles.likeComment}`} >
-                        <FavoriteBorderIcon />
-                    </div>
-
-                    <div className={`${styles.statusUser}`}>
-                        <p>1 giờ trước</p>
-                    </div>
-
-                    <div className={`${styles.likeCount}`}>
-                        <p>1k lượt thích</p>
-                    </div>
-
-                    <div className={`${styles.reply}`}>
-                        <a className={`${styles.btnReply}`} href="#">Trả lời</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
 
     const inputComment = (
         <div className={`${styles.inputComment}`}>
@@ -140,15 +150,55 @@ export default function Comment() {
             </div>
 
             <div className={`${styles.input_commentContent}`}>
-                <input className={`${styles.input_Content}`} type="text" ></input>
+                <input className={`${styles.input_Content}`} type="text" onChange={e=> setData({...data, body: e.target.value})}></input>
             </div>
 
             <div className={`${styles.input_Submit}`}>
-                <a className={`${styles.a_Submit}`} href="#">Đăng</a>
+                <button className={`${styles.a_Submit}`} href="#" onClick={handleSubmit}>Đăng</button>
             </div>
         </div>
     );
 
+    const defaultComment = (
+        <div className={`${styles.userComment}`}>
+        <div className={`${styles.User}`}>
+            <div className={`${styles.userInfo}`}>
+                <div className={`${styles.avatarUser}`}>
+                    <Avatar
+                        alt="User1"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJCffxOKRLn21jLPSYrtR5knqhMJ7jWsq9EQ&usqp=CAU" />
+                </div>
+                {profile && (
+                <div className={`${styles.nameUser}`}>
+                    <p >{profile.username}</p>
+                </div>
+                )}
+            </div>
+
+            <div className={`${styles.commentBody}`}>
+                <div className={`${styles.commentUser}`} >
+                    <p >Comment ở đây nè</p>
+                </div>
+
+                <div className={`${styles.likeComment}`} >
+                    <FavoriteBorderIcon />
+                </div>
+
+                <div className={`${styles.statusUser}`}>
+                    <p>1 giờ trước</p>
+                </div>
+
+                <div className={`${styles.likeCount}`}>
+                    <p>1k lượt thích</p>
+                </div>
+
+                <div className={`${styles.reply}`}>
+                    <a className={`${styles.btnReply}`} href="#">Trả lời</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    )
     const content_Right = (
         <div className={`${styles.contentRight}`}>
             <div className={`${styles.posterSticky}`}>
@@ -156,12 +206,12 @@ export default function Comment() {
             </div>
 
             <div className={`${styles.content}`}>
-                {statusUser}{statusUser}
-                {statusUser}{statusUser}
-                {statusUser}{statusUser}
-                {statusUser}{statusUser}
-                {statusUser}{statusUser}
-                {statusUser}{statusUser}
+                {defaultComment}
+                {postcmt && (
+                    <>
+                        <ListComments postcmt={postcmt.data}></ListComments>
+                    </>
+                )}
             </div>
 
             <div className={`${styles.inputSticky}`}>

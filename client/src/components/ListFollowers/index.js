@@ -8,7 +8,7 @@ function ListFollowers({ users }) {
         <div>
             {users && users.map((user, i) => {
                 return (
-                    <div className={`${styles.User}`}>
+                    <div key={user.user_id} className={`${styles.User}`}>
                         <Avatar
                             src={'NoAccounts'}
                             className={`${styles.avatarUser}`} />
