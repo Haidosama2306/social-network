@@ -26,9 +26,11 @@ import Search from "../../components/Search";
 import { hideModalSearch, showModalSearch } from "../../redux/actions/modalSearch";
 import {  useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import Notify from "../../components/notify";
 
 export default function SideBar({ tabActive, onClickTab }) {
-
+const navigator = useNavigate()
   const [users, setUser] = useState('');
 
   useEffect(() => {
@@ -80,6 +82,11 @@ const handleShowModalSearch = useCallback(()=>{
       dispatch(hideModalSearch())
   }
 },[dispatch, toggleSearch])
+const handleLogout = ()=>{
+  localStorage.removeItem('auth_token')
+  localStorage.removeItem('auth_user')
+  window.location.href='/'
+}
   // Test Data
   const currentUser = {
     id: '123',
@@ -159,13 +166,15 @@ const handleShowModalSearch = useCallback(()=>{
       </div>
       <div className={`${styles.hide_icon_more} mb-6`}>
         <NavItem
-          icon={<IconMenu />}
+          icon={<i class="fa-solid fa-right-from-bracket"></i>}
           activeIcon={<IconMenuActive />}
           isActive={false}
-          title={"More"}
-          onClick={() => console.log("")}
+          title={"Logout"}
+          onClick={handleLogout}
         />
       </div>
+      <Notify/>
+      <Notify/>
     </div>
   );
 }

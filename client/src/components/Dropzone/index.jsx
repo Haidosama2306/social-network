@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { IconPrev } from "../icons/ic_prev";
 import axios from "axios";
+import { CreateImage } from "../icons/ic_create_img";
 
 const Dropzone = () => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -22,20 +23,8 @@ const Dropzone = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
-    const images = acceptedFiles.filter((file) =>
-      file.type.startsWith("image/")
-    );
-    const videos = acceptedFiles.filter((file) =>
-      file.type.startsWith("video/")
-    );
-
     setSelectedImages(
-      images.map((file) =>
-        Object.assign(file, { preview: URL.createObjectURL(file) })
-      )
-    );
-    setSelectedVideos(
-      videos.map((file) =>
+      acceptedFiles.map((file) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       )
     );
@@ -73,13 +62,11 @@ const Dropzone = () => {
       }
 
       const validImages = selectedImages.filter((image) => image.preview);
-      const validVideos = selectedVideos.filter((video) => video.preview);
 
       const response = await axios.post(
         "http://localhost:5000/posts/create-post",
         {
           images: validImages.map((image) => image.preview),
-          videos: validVideos.map((video) => video.preview),
           caption,
         }
       );
@@ -112,7 +99,7 @@ const Dropzone = () => {
   return (
     <div className="grid ">
       {selectedImages.length > 0 || selectedVideos.length > 0 ? (
-        <div className="grid grid-rows-3">
+        <div className="grid">
           <div className="row-span-1">
             <div className="flex justify-between border-b-[1px]">
               <div onClick={openDiscardDialog} style={{ cursor: "pointer" }}>
@@ -132,35 +119,54 @@ const Dropzone = () => {
               </div>
             </div>
           </div>
-          <div className="row-span-2 flex">
-            {selectedImagesRender}
+          <div className="row-span-1"
+            style={{
+              display: isCaptionVisible ? "block" : "none",
+              padding: "10px",
+            }}
+          >
+            <TextField
+              label="Caption"
+              variant="outlined"
+              fullWidth
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+            />
           </div>
+          <div className="row-span-1 flex">{selectedImagesRender}</div>
         </div>
       ) : (
         <div className="grid justify-center">
-          <div
-            {...getRootProps()}
-            style={{
-              cursor: "pointer",
-              borderRadius: "8px",
-              color: "white",
-              textAlign: "center",
-              width: "200px",
-            }}
-            className="bg-blue-500 border-none"
-          >
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
-            ) : (
-              <button
-                style={{
-                  padding: "7px 16px",
-                }}
-              >
-                Select from computer
-              </button>
-            )}
+          <div {...getRootProps()}>
+            <div className="grid justify-center p-10">
+              <div className="grid justify-center">
+                <CreateImage />
+              </div>
+              <Typography>Kéo ảnh và video vào đây</Typography>
+            </div>
+            <div
+              style={{
+                cursor: "pointer",
+                borderRadius: "8px",
+                color: "white",
+                textAlign: "center",
+                width: "270px",
+              }}
+              className="bg-blue-500 border-none"
+            >
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <p>Drop the files here ...</p>
+              ) : (
+                <button
+                  style={{
+                    padding: "7px 16px",
+                  }}
+                >
+                  Select from computer
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -187,21 +193,6 @@ const Dropzone = () => {
           <Button onClick={handleCloseModal}>Đóng</Button>
         </DialogActions>
       </Dialog>
-
-      <div
-        style={{
-          display: isCaptionVisible ? "block" : "none",
-          padding: "16px",
-        }}
-      >
-        <TextField
-          label="Caption"
-          variant="outlined"
-          fullWidth
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-        />
-      </div>
     </div>
   );
 };

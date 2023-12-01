@@ -15,7 +15,9 @@ import {
 } from "../icons";
 import { IconApp } from "../icon_app";
 import UserAvatarStory from "../user_avatar_story";
-
+import  io  from 'socket.io-client';
+const URL =  'http://localhost:5001/';
+const socket = io.connect(URL)
 export default function PostItem({ post }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -33,6 +35,10 @@ export default function PostItem({ post }) {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+  const handleNotify = (id, i)=>{
+    const data= {user_id: '656454f54da0c95fb1d1f0df', post_id: id, sender_user_id: localStorage.getItem('auth_user'),type:'notify', typeSecond: 'notify'}
+    socket.emit('send',data)
+  }
   return (
     <div className="bg-white mt-4 rounded-lg border-[1px]">
       {/* Header */}
@@ -73,10 +79,10 @@ export default function PostItem({ post }) {
           <p className="text-sm font-semibold">{post.caption}</p>
         </div>
       )}
-
+      <div style={{display: 'none'}} id="idPost">{post._id}</div>
       {/* List Icons */}
-      <div className="flex flex-row m-1">
-        <IconApp icon={<IconHeart />} onClick={() => console.log("")} />
+      <div className="flex flex-row m-1" >
+        <IconApp icon={<IconHeart />}   onClick={()=>handleNotify(post._id)} />
         <IconApp icon={<IconComment />} onClick={handleOpenModal} />
         <ModalComment open={isModalOpen} onClose={handleCloseModal} />
         <IconApp icon={<IconShare />} onClick={() => console.log("")} />

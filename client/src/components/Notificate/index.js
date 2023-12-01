@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modalState$ } from '../../redux/selectors';
 function Notificate() {
     const  isOpen  = useSelector(modalState$);
-    console.log(isOpen.modal);
     return (
         <div className={classess.k } style={{ display: isOpen.modal.isOpen ? 'block' : 'none', width: isOpen ? '400px' : '0', }}>
         <h4>Thông báo</h4>
