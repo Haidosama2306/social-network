@@ -1,5 +1,5 @@
 import { Avatar, Button, CardHeader, Grid, IconButton, Typography, CardActions, Input, InputAdornment } from '@mui/material';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import classess from './style.module.css'
 import axios from 'axios';
 import { MoodRounded } from '@mui/icons-material';
@@ -11,13 +11,13 @@ import Picker from "emoji-picker-react";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FileBase64 from 'react-file-base64';
 import ListMessage from '../../components/ListMessage';
-import { useParams } from 'react-router-dom';
 import  io  from 'socket.io-client';
-
+import Swal from 'sweetalert2'
 const URL =  'http://localhost:5001/';
 const socket = io.connect(URL)
 function MessagesPage() {
   const [users, setUser] = useState('');
+  
     useEffect(() => {
         const bearerToken = localStorage.getItem('auth_token');
         const headers = {
@@ -45,10 +45,16 @@ function MessagesPage() {
   const [file, setFile] = useState()
   const messages = useSelector(messageState$);
   
-  
-  socket.on('check',(data)=>{
-    console.log(data);
-  })
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth",block: "end", inline: "nearest" })
+    console.log(1);
+  }
+  useEffect(() => {
+    scrollToBottom()
+  }, [chooseUser]);
+
   useEffect(() => {
     socket.emit('room', localStorage.getItem('auth_user'))
     socket.on('message', (data) => {
@@ -92,7 +98,6 @@ function MessagesPage() {
   },[chooseUser])
   const handleFilebase64 = (e)=>{
    
-    console.log(content);
     const data = {
       room: localStorage.getItem('room'),
       content: e.name, 
@@ -129,7 +134,22 @@ function MessagesPage() {
 
     return replacedText;
   };
-  
+  const handleDelete = ()=>{
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Xóa ở phía bạn?",
+      denyButtonText: `Xóa ở hai phía?`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire("Saved!", "", "success");
+      } else if (result.isDenied) {
+        Swal.fire("Saved!", "", "success");
+      }
+    });
+  }
   return (
     <Grid container style={{ flexDirection: 'row-reverse' }} spacing={3}>
       <Grid item xs={2.5} className={`${classess.box_message}`} >
@@ -137,6 +157,7 @@ function MessagesPage() {
 
           title="Chi Tiết"
         />
+        <Button onClick={handleDelete} variant='outlined' style={{position: 'absolute', bottom: '20px', transform:' translate(40%, 10px)'}}>Xóa Tất Cả Tin Nhắn</Button>
       </Grid>
       <Grid item sx={{ borderRight: 1, borderLeft: 1 }} className={`${classess.box_message}`} xs={5}>
         {users && (
@@ -151,9 +172,9 @@ function MessagesPage() {
           <Typography variant='h6' color='textSecond'>@linh</Typography>
           <Button color='info'>Xem Trang Cá Nhân</Button>
         </div>
-        <div className={classess.box} >
-        <ListMessage messages={messages.data}></ListMessage>
-        </div>
+        
+        <ListMessage ref={messagesEndRef} messages={messages.data} chooseUser={chooseUser}></ListMessage>
+       
         <CardActions className='pb-4'>
           <div style={{ position: 'absolute', top: '220px' }}>
             {showPicker && (

@@ -59,9 +59,10 @@ io.on('connection', (socket)=>{
                 const notify = new NotifyModel({sender_user_id: data.sender_user_id, user_id: data.user_id, type: data.type, post_id: data.post_id})
                 await notify.save()
                 const users = await UserModel.find({ _id:data.sender_user_id },{ password: 0 }).lean();
+                console.log(1);
                 socket.to(data.user_id).emit('notify',{
                    
-                    name: users.name,
+                    name: users[0].username,
                     user_id: data.user_id,
                 })
             break;

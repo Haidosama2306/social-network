@@ -10,16 +10,22 @@ import Swal from 'sweetalert2';
 function ForgotPass() {
     const [email, setEmail]= useState('')
     const handleFogotPwd = ()=>{
-        axios.post('http://localhost:5000/auth/forgotPass',{data: email})
+        if (email == '') {
+            Swal.fire('Không được để trống email!')
+            
+        }else{
+            axios.post('http://localhost:5000/auth/forgotPass',{data: email})
         .then(isSuccess=>{
                 Swal.fire('Chúng tôi sẽ gửi tin nhắn qua mail của bạn vui lòng kiểm tra email hoắc trong mục spam! ')
                 
                 
             })
             .catch((err)=>{
-            console.log(err);
+                Swal.fire('Email của bạn không tồn tại!')
+
 
         })
+        }
     }
     return (
         // className={`${Styles.logo}`}

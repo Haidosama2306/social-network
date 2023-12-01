@@ -42,9 +42,14 @@ export const updateUser = async (req, res) => {
     }
 }
 export const search = async (req, res) => {
+    console.log(req.body);
     try {
-        const data = req.body.data
-        const users = await UserModel.find({ username: { $regex: data, $options: 'i' } });
+        const currentPage = parseInt(req.body.data.page) || 1;
+      console.log(currentPage);
+    const skip = (currentPage - 1) * 5;
+        const data = req.body.data.name
+        const users = await UserModel.find({ username: { $regex: data, $options: 'i' } }).limit(5).skip(skip);
+        console.log(users);
         res.status(200).json(users);
 
     } catch (err) {

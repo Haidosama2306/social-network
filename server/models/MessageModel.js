@@ -28,6 +28,10 @@ const schema = new mongoose.Schema(
     file:{
       type: String,
 
+    },
+    seem:{
+      type: String,
+      default: '2'
     }
     //Created_at , Updated_at
   },
