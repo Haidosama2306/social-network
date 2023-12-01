@@ -28,24 +28,13 @@ app.use('/posts', posts);
 app.use('/users',users);
 app.use('/followers',followers);
 app.use('/messages',messages);
-<<<<<<< HEAD
-<<<<<<< HEAD
 app.use('/comments', comments)
-=======
-=======
-app.use('/comments', comments)
->>>>>>> f767c41302683c83aaf9298d9d35c98b1840490a
 app.use('/notify',notify);
 var io = new Server(http.createServer(app).listen(5001), {
     cors:{
         origin: "*"
     }
 });
-<<<<<<< HEAD
->>>>>>> 1d67d517bbdbab05869821ea24735ececf901275
-=======
-
->>>>>>> f767c41302683c83aaf9298d9d35c98b1840490a
 // var io2 = socket.listen(server);
 io.on('connection', (socket)=>{
     socket.on('room',(data)=>{
