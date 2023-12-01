@@ -1,6 +1,7 @@
 import { UserModel } from "../models/UserModel.js";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer'
 import validate from 'validator'
 import { BioModel } from "../models/BioModel.js";
 import { FollowersModel } from "../models/FollowersModel.js";
@@ -160,3 +161,99 @@ export const register = async (req, res) => {
 
     }
   }
+  export const sendEmailForgetPwd = async (req, res)=>{
+    try {
+      console.log(req.body);
+      const account = await UserModel.find({email: req.body.data})
+      if (account.length == 0) {
+        return res.status(401).json({message: 'Tài khoản không tồn tại!'})
+      }else{
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: '21211tt0294@mail.tdc.edu.vn',
+            pass: 'Linhnguyen1@'
+          }
+        });
+        const payload = { _id: account[0]._id };
+      
+          const token=        jwt.sign(payload, 'resetpwd', { expiresIn: 1200 })
+        
+        // Nội dung email
+        const mailOptions = {
+          from: 'MXH <noreply@mail.com>',
+          replyTo: 'noreply.21211tt0294@mail.tdc.edu.vn',
+          to: req.body.data,
+          subject: 'Đổi mật khẩu',
+          html: `Click vào đây để lấy lại password của bạn: <a href='http://localhost:3000/resetPass/?token=${token}'>http://localhost:3000/resetPass</a>`
+        };
+        let isSend = false
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+      return res.status(200).json(true) 
+
+          } else {
+      return res.status(200).json(false) 
+              
+          }
+      });
+      }
+      return res.status(200).json(false) 
+    } catch (error) {
+      return        res.status(401).json(false) 
+
+    }
+  }
+  export const resetPwd =  (req, res)=>{
+    try {
+     jwt.verify(req.body.data,'resetpwd',(err, user)=>{
+      if (err) throw res.json(err);
+      return res.json(true);
+      })
+    } catch (error) {
+      return        res.status(401).json(false) 
+
+    }
+  }
+  export const updatePassword = async (req, res)=>{
+    try {
+      const { password, comfirm_pwd, token } = req.body.data;
+      const jwttoken = jwt.verify(token, 'resetpwd')
+      const validator = []
+        if (!validate.isLength(password,{min: 5, max: 32})) {
+          validator.push({password:'Password từ 6 đến 32 kí tự'})
+        }
+        if (validate.isEmpty(comfirm_pwd)) {
+          validator.push({comfirm_pwd: "Không được bỏ trống"})
+        }else if (comfirm_pwd != password) {
+          validator.push({comfirm_pwd: "Mật khẩu nhập lại sai"})
+          
+        }
+        if (validator.length > 0) {
+          return res.status(400).json({err: validator})
+        }
+     
+
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, async (err, hash) => {
+          if (err) throw err;
+  
+          // newUser.password = hash;
+  
+          try {
+            const changePass = await UserModel.findByIdAndUpdate({_id: jwttoken._id}, {password: hash}, {new: true});
+            return res.status(200).json(true);
+
+            
+           
+          } catch (err) {
+            console.error('Failed to save user to database', err);
+            return res.status(500).json({ err: 'Internal Server Error' });
+          }
+        });
+    })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  

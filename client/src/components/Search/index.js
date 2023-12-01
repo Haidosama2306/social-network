@@ -11,7 +11,6 @@ function Search() {
     const [data, setData] = useState('')
     const [user, setUser] = useState('')
     const navigate = useNavigate()
-    console.log(isOpen);
     useEffect(() => {
         const bearerToken = localStorage.getItem('auth_token');
         const headers = {
