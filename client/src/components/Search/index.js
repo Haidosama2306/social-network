@@ -5,16 +5,6 @@ import { modalSearchState$ } from '../../redux/selectors';
 import axios from 'axios';
 import ListUser from '../ListUser';
 import { Link, useNavigate } from 'react-router-dom';
-function Search() {
-    const isOpen = useSelector(modalSearchState$);
-    const [data, setData] = useState('')
-    const [user, setUser] = useState('')
-    const navigate = useNavigate()
-    useEffect(() => {
-        const bearerToken = localStorage.getItem('auth_token');
-        const headers = {
-            'Authorization': `Bearer ${bearerToken}`,
-            'Content-Type': 'application/json',
 
 function Search() {
   const isOpen = useSelector(modalSearchState$);
@@ -29,18 +19,18 @@ function Search() {
       'Authorization': `Bearer ${bearerToken}`,
       'Content-Type': 'application/json',
     };
-    const dataPage = { name: data, page: page +1  };
+    const dataPage = { name: data, page: page + 1 };
     console.log(page);
     axios.post('http://localhost:5000/users/search', { data: dataPage }, { headers: headers })
       .then(response => {
-        const newUser = response.data || []; 
+        const newUser = response.data || [];
         console.log(newUser);
         console.log(page);
-        if (page !=0) {
-            
-            setUser(prevUser => [...prevUser, ...newUser]); // Spread giá trị mới vào mảng
-        }else{
-        setUser(newUser)
+        if (page != 0) {
+
+          setUser(prevUser => [...prevUser, ...newUser]); // Spread giá trị mới vào mảng
+        } else {
+          setUser(newUser)
 
         }
       })
@@ -71,5 +61,5 @@ function Search() {
     </div>
   );
 }
-
+    
 export default Search;

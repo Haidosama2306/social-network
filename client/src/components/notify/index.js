@@ -8,7 +8,7 @@ function Notify({notify}) {
         <div className={`${style.notify}`} id='notify_alret'>
             <Card >
                 <CardHeader avatar={<Avatar>L</Avatar> }
-                subheader={`${notify? notify[0]?.username: ''} và 1000 người khác đã thích bài viết của bạn`}
+                subheader={`${notify? notify[0]?.username: ''} đã thích bài viết của bạn`}
                 action={
 
                     <IconButton><Close/></IconButton>

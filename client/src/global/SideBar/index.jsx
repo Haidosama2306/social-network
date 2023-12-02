@@ -75,11 +75,10 @@ const navigator = useNavigate()
   },[isVisible,notify])
   useEffect(() => {
       const timer = setTimeout(() => {
-       
+       console.log(1);
           notify_alret.current.style.display = 'none';
         
-        console.log(notify_alret);
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }, [isVisible, notify]);
   const handleOpenModal = () => {
@@ -173,7 +172,8 @@ const handleLogout = ()=>{
           />
         </div>
         <div>
-        <div className={`${styles.notify}`} ref={notify_alret} id='notify_alret'>
+        <div className={`${styles.notify}`} ref={notify_alret} 
+      >
             <Card >
                 <CardHeader avatar={<Avatar>L</Avatar> }
                 subheader={`${notify? notify.name: ''} và 1000 người khác đã thích bài viết của bạn`}
@@ -213,8 +213,6 @@ const handleLogout = ()=>{
           onClick={handleLogout}
         />
       </div>
-      <Notify/>
-      <Notify/>
     </div>
   );
 }
