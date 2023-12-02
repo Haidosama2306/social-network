@@ -50,7 +50,7 @@ export default function Comment() {
         axios.post('http://localhost:5000/comments/findcomments',{data: data}, {headers: headers})
         .then((res)=>{
             const postcmt = res.data
-            console.log('res:',res);
+            // console.log('res:',res);
             setPostcmt(postcmt)
         })
         .catch(error=>{
