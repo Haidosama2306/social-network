@@ -17,7 +17,7 @@ export default function Comment() {
     const [profile, setprofile] = useState('');
     const [postcmt, setPostcmt] = useState('')
     const [data, setData] = useState({
-        post_id: '',
+        post_id: postID,
         user_id: '',
         username: '',
         body: '',
@@ -50,6 +50,7 @@ export default function Comment() {
         axios.post('http://localhost:5000/comments/findcomments',{data: data}, {headers: headers})
         .then((res)=>{
             const postcmt = res.data
+            console.log('res:',res);
             setPostcmt(postcmt)
         })
         .catch(error=>{
@@ -66,9 +67,9 @@ export default function Comment() {
     };
         axios.post('http://localhost:5000/comments/insertcomments',{data: data}, {headers: headers})
         .then((res)=>{
-            const postcmt = res.data
-            setPostcmt(postcmt)
-            setData({post_id: postID, user_id: profile._id, username: profile.username, body: postcmt.body})
+            const postcmt2 = res.data
+            setPostcmt([...postcmt, postcmt2])
+            setData({...data, post_id: postID, user_id: profile._id, username: profile.username, body: postcmt.body})
             // Swal.fire("Thêm Bình luận thành công!");
 
             console.log('profile: ',profile);
@@ -206,11 +207,11 @@ export default function Comment() {
             </div>
 
             <div className={`${styles.content}`}>
-                {defaultComment}
+                {/* {defaultComment} */}
                 {postcmt && (
-                    <>
-                        <ListComments postcmt={postcmt.data}></ListComments>
-                    </>
+                   
+                        <ListComments postcmt={postcmt}></ListComments>
+                    
                 )}
             </div>
 
