@@ -7,6 +7,7 @@ import followers from './routers/followers.js'
 import messages from './routers/messages.js';
 import notify from './routers/notify.js';
 import auth from './routers/auth.js';
+import  comments from "./routers/comments.js";
 import {connect} from './config/index.js'
 import { Server } from "socket.io";
 const app = express();
@@ -27,6 +28,7 @@ app.use('/posts', posts);
 app.use('/users',users);
 app.use('/followers',followers);
 app.use('/messages',messages);
+app.use('/comments', comments)
 app.use('/notify',notify);
 
 var io = new Server(http.createServer(app).listen(5001), {

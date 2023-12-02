@@ -4,7 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modalSearchState$ } from '../../redux/selectors';
 import axios from 'axios';
 import ListUser from '../ListUser';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+function Search() {
+    const isOpen = useSelector(modalSearchState$);
+    const [data, setData] = useState('')
+    const [user, setUser] = useState('')
+    const navigate = useNavigate()
+    useEffect(() => {
+        const bearerToken = localStorage.getItem('auth_token');
+        const headers = {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json',
 
 function Search() {
   const isOpen = useSelector(modalSearchState$);

@@ -23,7 +23,6 @@ function ForgotPass() {
             .catch((err)=>{
                 Swal.fire('Email của bạn không tồn tại!')
 
-
         })
         }
     }

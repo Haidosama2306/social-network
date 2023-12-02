@@ -17,7 +17,6 @@ const URL =  'http://localhost:5001/';
 const socket = io.connect(URL)
 function MessagesPage() {
   const [users, setUser] = useState('');
-  
     useEffect(() => {
         const bearerToken = localStorage.getItem('auth_token');
         const headers = {
@@ -44,7 +43,6 @@ function MessagesPage() {
   const [showPicker, setShowPicker] = useState(false)
   const [file, setFile] = useState()
   const messages = useSelector(messageState$);
-  
   const messagesEndRef = useRef(null)
 
   const scrollToBottom = () => {
@@ -54,7 +52,6 @@ function MessagesPage() {
   useEffect(() => {
     scrollToBottom()
   }, [chooseUser]);
-
   useEffect(() => {
     socket.emit('room', localStorage.getItem('auth_user'))
     socket.on('message', (data) => {
@@ -182,11 +179,10 @@ function MessagesPage() {
           <h4>Linh</h4>
           <Typography variant='h6' color='textSecond'>@linh</Typography>
           <Button color='info'>Xem Trang Cá Nhân</Button>
-        </div>
-        
+        </div>   
 <div >
 <ListMessage ref={messagesEndRef} messages={messages.data} chooseUser={chooseUser}></ListMessage>
-  </div>       
+  </div>     
         <CardActions className='pb-4'>
           <div style={{ position: 'absolute', top: '220px' }}>
             {showPicker && (

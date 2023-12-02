@@ -12,20 +12,25 @@ import { messageState$ } from './redux/selectors';
 
 import Login from './auth/Login';
 import axios from 'axios';
-
+import Notify from './components/notify';
+// "undefined" means the URL will be computed from the `window.location` object
+const URL =  'http://localhost:5001/';
+const socket = io.connect(URL)
 // const [isConnected, setIsConnected] = useState(socket.connected);
 //   socket.emit('mess',"a")
 
 function App() {
   const [isLogin, setLogin]=useState(false)
+  const [notify, setNotify]= useState()
+  const [isVisible, setIsVisible] = useState(true);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setIsVisible(false);
-  //   }, 3000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+    return () => clearTimeout(timer);
+  }, []);
   useEffect(()=>{
     const bearerToken = localStorage.getItem('auth_token');
     const headers = {
@@ -47,10 +52,18 @@ function App() {
   },[isLogin])
   // const dispatch =useDispatch()
   // const messages = useSelector(messageState$);
- 
+
+  useEffect(()=>{
+    socket.emit('room', localStorage.getItem('auth_user'))
+    socket.on('notify', (data)=>{
+      setNotify(data)
+    });
+  })
   return (
     <div>
-     
+      <div>
+      {isVisible && <Notify notify={notify} />}
+    </div>
       <RouterProvider router={isLogin? router : routerauth} />
     </div>
   );

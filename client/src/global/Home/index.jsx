@@ -81,11 +81,14 @@ export default function HomePage() {
 
     fetchPosts();
   }, []);
+  const sortedPosts = listPosts
+    .slice()
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   return (
     <div className="flex justify-center pb-16">
       <div className={`${styles.container_feed}`}>
 
-      {listPosts.map((post) => (
+      {sortedPosts.map((post) => (
           <PostItem post={post} key={post._id} />
         ))}
       </div>

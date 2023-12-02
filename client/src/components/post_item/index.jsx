@@ -63,7 +63,7 @@ export default function PostItem({ post }) {
               <img
                 draggable={false}
                 className="max-h-[30rem] w-full"
-                src={image}
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg/220px-Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg"
                 alt={`Image ${index}`}
               />
             </div>

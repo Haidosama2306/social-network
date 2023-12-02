@@ -213,6 +213,8 @@ const handleLogout = ()=>{
           onClick={handleLogout}
         />
       </div>
+      <Notify/>
+      <Notify/>
     </div>
   );
 }
