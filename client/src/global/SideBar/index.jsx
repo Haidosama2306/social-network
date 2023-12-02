@@ -92,7 +92,9 @@ const navigator = useNavigate()
   const handleShowModal = useCallback(()=>{
     setToggle(!toggle);
     if (toggle) {
+      console.log(1);
         dispatch(showModalNotifi())
+
         
     }else{
         dispatch(hideModalNotifi())
@@ -153,6 +155,7 @@ const handleLogout = ()=>{
           />
         </div>
         <Search/>
+        <Notificate/>
         <NavItem
           icon={<IconMessages />}
           activeIcon={<IconMessagesActive />}

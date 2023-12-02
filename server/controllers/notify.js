@@ -3,8 +3,10 @@ import { NotifyModel } from "../models/NotifyModel.js"
 export const getNotify = async (req, res)=>{
     try{
     const getNotify = await NotifyModel.find({user_id: req.user.id});
-    res.status(200).json(getNotify);
+    console.log('notifi:',req.user);
+    return res.status(200).json(getNotify);
     } catch (err) {
+        console.log(err);
         res.status(500).json({ error: err });
     }
 }

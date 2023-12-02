@@ -139,14 +139,25 @@ function MessagesPage() {
       title: "Do you want to save the changes?",
       showDenyButton: true,
       showCancelButton: true,
-      confirmButtonText: "Xóa ở phía bạn?",
-      denyButtonText: `Xóa ở hai phía?`
+      denyButtonText: `Xóa `
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         Swal.fire("Saved!", "", "success");
       } else if (result.isDenied) {
-        Swal.fire("Saved!", "", "success");
+        const bearerToken = localStorage.getItem('auth_token');
+        const headers = {
+          'Authorization': `Bearer ${bearerToken}`,
+          'Content-Type': 'application/json',
+        };
+        axios.post('http://localhost:5000/messages/delete',{data: localStorage.getItem('room')},{headers: headers})
+        .then(e=>{
+          Swal.fire("Saved!", "", "success");
+          
+        })
+        .catch(e=>{
+          Swal.fire('Error')
+        })
       }
     });
   }
@@ -173,8 +184,9 @@ function MessagesPage() {
           <Button color='info'>Xem Trang Cá Nhân</Button>
         </div>
         
-        <ListMessage ref={messagesEndRef} messages={messages.data} chooseUser={chooseUser}></ListMessage>
-       
+<div >
+<ListMessage ref={messagesEndRef} messages={messages.data} chooseUser={chooseUser}></ListMessage>
+  </div>       
         <CardActions className='pb-4'>
           <div style={{ position: 'absolute', top: '220px' }}>
             {showPicker && (
@@ -205,6 +217,8 @@ function MessagesPage() {
         )}
         <h4>Tin nhắn</h4>
 
+        <div style={{    maxHeight: '500px',
+    overflow: 'auto'}}>
         {messages.users.users && messages.users.users.map((e, i)=>{
           const check = e._id != localStorage.getItem('auth_user')
             return( 
@@ -218,6 +232,7 @@ function MessagesPage() {
              
           )
         })}
+        </div>
 
       </Grid>
     </Grid>

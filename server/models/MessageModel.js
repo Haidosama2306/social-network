@@ -29,10 +29,7 @@ const schema = new mongoose.Schema(
       type: String,
 
     },
-    seem:{
-      type: String,
-      default: '2'
-    }
+    
     //Created_at , Updated_at
   },
   { timestamps: true }

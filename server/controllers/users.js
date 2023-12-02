@@ -46,9 +46,10 @@ export const search = async (req, res) => {
     try {
         const currentPage = parseInt(req.body.data.page) || 1;
       console.log(currentPage);
-    const skip = (currentPage - 1) * 5;
+    const skip = (currentPage - 1) * 7;
         const data = req.body.data.name
-        const users = await UserModel.find({ username: { $regex: data, $options: 'i' } }).limit(5).skip(skip);
+        
+        const users = await UserModel.find({ username: { $regex: data, $options: 'i' } }).limit(7).skip(skip);
         console.log(users);
         res.status(200).json(users);
 
