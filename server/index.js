@@ -7,7 +7,7 @@ import followers from './routers/followers.js'
 import messages from './routers/messages.js';
 import notify from './routers/notify.js';
 import auth from './routers/auth.js';
-import { comments } from "./controllers/comments.js";
+import  comments from "./routers/comments.js";
 import {connect} from './config/index.js'
 import { Server } from "socket.io";
 const app = express();
