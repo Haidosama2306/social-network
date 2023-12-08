@@ -15,3 +15,7 @@
     word-wrap: break-word
 
   }
+  .box{
+    height: 340px !important;
+    overflow: auto  
+ }

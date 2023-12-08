@@ -52,6 +52,7 @@ function App() {
   },[isLogin])
   // const dispatch =useDispatch()
   // const messages = useSelector(messageState$);
+
   useEffect(()=>{
     socket.emit('room', localStorage.getItem('auth_user'))
     socket.on('notify', (data)=>{

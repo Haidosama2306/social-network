@@ -28,7 +28,8 @@ const schema = new mongoose.Schema(
     file:{
       type: String,
 
-    }
+    },
+    
     //Created_at , Updated_at
   },
   { timestamps: true }

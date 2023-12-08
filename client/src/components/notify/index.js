@@ -5,10 +5,10 @@ import { Close } from '@mui/icons-material';
 function Notify({notify}) {
     console.log(notify);
     return (
-        <div className={`${style.notify}`}>
+        <div className={`${style.notify}`} id='notify_alret'>
             <Card >
                 <CardHeader avatar={<Avatar>L</Avatar> }
-                subheader={'Linh và 1000 người khác đã thích bài viết của bạn'}
+                subheader={`${notify? notify[0]?.username: ''} đã thích bài viết của bạn`}
                 action={
 
                     <IconButton><Close/></IconButton>

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import ModalCreate from "../../components/Modal/Modal_Create";
 import {
   IconCreate,
@@ -28,11 +28,16 @@ import {  useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Notify from "../../components/notify";
-
+import { io } from "socket.io-client";
+import { Close } from "@mui/icons-material";
+import { Avatar, Card, CardHeader, IconButton } from "@mui/material";
+// "undefined" means the URL will be computed from the `window.location` object
+const URL =  'http://localhost:5001/';
+const socket = io.connect(URL)
 export default function SideBar({ tabActive, onClickTab }) {
 const navigator = useNavigate()
   const [users, setUser] = useState('');
-
+  const notify_alret = useRef()
   useEffect(() => {
     const bearerToken = localStorage.getItem('auth_token');
     const headers = {
@@ -56,7 +61,26 @@ const navigator = useNavigate()
   const [toggle, setToggle] = useState(false);
   const [toggleSearch, setToggleSearch] = useState(false);
   const dispatch = useDispatch();
+  
+  const [notify, setNotify]= useState()
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(()=>{
+    socket.emit('room', localStorage.getItem('auth_user'))
+    socket.on('notify', (data)=>{
+      setNotify(data)
+  console.log(notify);
+                notify_alret.current.style.display = 'block';
 
+    });
+  },[isVisible,notify])
+  useEffect(() => {
+      const timer = setTimeout(() => {
+       console.log(1);
+          notify_alret.current.style.display = 'none';
+        
+      }, 2000);
+      return () => clearTimeout(timer);
+    }, [isVisible, notify]);
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -67,7 +91,9 @@ const navigator = useNavigate()
   const handleShowModal = useCallback(()=>{
     setToggle(!toggle);
     if (toggle) {
+      console.log(1);
         dispatch(showModalNotifi())
+
         
     }else{
         dispatch(hideModalNotifi())
@@ -128,6 +154,7 @@ const handleLogout = ()=>{
           />
         </div>
         <Search/>
+        <Notificate/>
         <NavItem
           icon={<IconMessages />}
           activeIcon={<IconMessagesActive />}
@@ -144,7 +171,20 @@ const handleLogout = ()=>{
             onClick={handleShowModal}
           />
         </div>
-          <Notificate/>
+        <div>
+        <div className={`${styles.notify}`} ref={notify_alret} 
+      >
+            <Card >
+                <CardHeader avatar={<Avatar>L</Avatar> }
+                subheader={`${notify? notify.name: ''} và 1000 người khác đã thích bài viết của bạn`}
+                action={
+
+                    <IconButton><Close/></IconButton>
+                }
+                />
+            </Card>
+        </div>
+    </div>
         <NavItem
           icon={<IconCreate />}
           activeIcon={<IconCreateActive />}
@@ -173,8 +213,6 @@ const handleLogout = ()=>{
           onClick={handleLogout}
         />
       </div>
-      <Notify/>
-      <Notify/>
     </div>
   );
 }

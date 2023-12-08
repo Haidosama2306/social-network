@@ -26,10 +26,7 @@
     align-items: center;
     padding: 15px 0;
  }
- .box{
-    height: 340px !important;
-    overflow: auto  
- }
+
  .comment{
     width: 100%;
     border-radius: 50px;

@@ -16,7 +16,16 @@ async function getOrCreateConversation(user1Id, user2Id) {
       return newConversation._id;
     }
   }
+export const deleteMessage = async (req, res)=>{
+  try {
+    const dele = await MessageModel.where({roomID: req.body.data}).deleteMany()
+    res.status(200).json({ message: 'success' });
 
+  } catch (error) {
+    console.log(error);
+  }
+
+}
 // Hàm để xử lý tạo mới và bắt đầu WebSocket server
 export const create = async (req, res) => {
     try {
@@ -47,10 +56,11 @@ export const getMessage = async (req, res)=>{
     try {
         // console.log(req.body);
     const conversationId = await getOrCreateConversation(req.body.data.receiver_user_id, req.user.id);
-
-    const messages = await MessageModel.find({ roomID:conversationId }).sort({ timestamp: 1 });
-
-    return res.status(200).json({ messages, room: conversationId})
+    const currentPage = parseInt(req.body.data.page) || 1;
+    const skip = (currentPage - 1) * 10;
+    const messages = await MessageModel.find({ roomID:conversationId }).sort({ timestamp: 1 }).limit(10).skip(skip);
+     
+    return res.status(200).json({ messages, room: conversationId, hasMore: messages.length === 10})
   } catch (error) {
     console.error('Lỗi khi lấy tin nhắn:', req.body);
   } 
